@@ -1,0 +1,21 @@
+$size: 0.5vw;
+
+.bar {
+  width: $size;
+  display: inline-block;
+  margin: $size/2;
+}
+
+#bars{
+  position: absolute;
+  bottom: 20vh;
+}
+
+.sortButton{
+  //color: white;
+  //background-color: blue;
+}
+
+.hide{
+  display: none
+}
