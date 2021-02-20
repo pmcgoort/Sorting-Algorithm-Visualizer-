@@ -14,7 +14,6 @@ class Main extends Component {
     this.insertionSort = this.insertionSort.bind(this)
     this.quickSort = this.quickSort.bind(this)
     this.animate = this.animate.bind(this)
-    this.stopSort = this.stopSort.bind(this)
   }
 
   /*creates the array of numbers that will be sorted*/
@@ -22,7 +21,7 @@ class Main extends Component {
 
     var nums = []
     for(let i = 0; i < 100; i++){
-      nums.push(Math.floor(Math.random() * 100))
+      nums.push(Math.floor(Math.random() * 50))
     }
 
     this.setState({
@@ -36,6 +35,12 @@ class Main extends Component {
     document.getElementById('createGraph').disabled = true
 
     const bars = document.getElementsByClassName('bar')
+    for(let i = 0; i < bars.length; i++){
+        const bar = bars[i].style
+        bar.height = this.state.nums[i].toString() + 'vh'
+    }
+
+
     var i = 0
     var animating = setInterval(animate, 4)
 
@@ -64,6 +69,7 @@ class Main extends Component {
         bar2.backgroundColor = 'gray'
       }, 20)
     }
+
   }
 
 
@@ -125,7 +131,7 @@ class Main extends Component {
       hideSorts: true
     })
 
-    this.animate(swaps, nums)
+    this.animate(swaps)
   }
 
   insertionSort(){
@@ -207,10 +213,6 @@ class Main extends Component {
   }
 
 
-  stopSort(){
-    document.getElementById('createGraph').disabled = true
-  }
-
   render(){
     var sortIds = 'sortButton'
     if(this.state.hideSorts){
@@ -231,9 +233,10 @@ class Main extends Component {
               return(
                 <div
                   className="bar"
+                  key={idx}
                   style={{
                       backgroundColor: 'gray',
-                      height: `${2*i/3}vh`,
+                      height: `${i}vh`,
                     }}>
                 </div>
             )
