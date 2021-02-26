@@ -1,3 +1,11 @@
+# Sorting Algorithim Visualizer
+
+This project shows how different sorting algorithims work by sorting a set of bars by height. Algorithims included in this project are Bubble Sort, Insertion Sort, Selection Sort and Quick Sort
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
