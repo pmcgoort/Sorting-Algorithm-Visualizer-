@@ -6,67 +6,79 @@ class Main extends Component {
     this.state = {
       nums: [],
       hideCreate: false,
-      hideSorts: true
+      hideSorts: true,
+      initial: true
     }
-    this.createNums = this.createNums.bind(this)
-    this.bubbleSort = this.bubbleSort.bind(this)
-    this.selectionSort = this.selectionSort.bind(this)
-    this.insertionSort = this.insertionSort.bind(this)
-    this.quickSort = this.quickSort.bind(this)
-    this.animate = this.animate.bind(this)
+    this.createNums = this.createNums.bind(this);
+    this.bubbleSort = this.bubbleSort.bind(this);
+    this.selectionSort = this.selectionSort.bind(this);
+    this.insertionSort = this.insertionSort.bind(this);
+    this.quickSort = this.quickSort.bind(this);
+    this.animate = this.animate.bind(this);
   }
 
   /*creates the array of numbers that will be sorted*/
   createNums(){
-
-    var nums = []
-    for(let i = 0; i < 100; i++){
+    let numBars;
+    if(this.state.initial){
+      numBars = 50;
+    } else {
+      numBars = document.getElementById('numBarsSlider').value;
+    }
+    let nums = [];
+    for(let i = 0; i < numBars; i++){
       nums.push(Math.floor(Math.random() * 50))
     }
 
     this.setState({
       nums: nums,
-      hideSorts: false
+      hideSorts: false,
+      initial: false
     })
   }
 
   /*animates the sorting process*/
   animate(swaps){
-    document.getElementById('createGraph').disabled = true
+    document.getElementById('numBarsSlider').disabled = true;
+    document.getElementById('speedSlider').disabled = true;
+    document.getElementById('createGraph').disabled = true;
 
     const bars = document.getElementsByClassName('bar')
     for(let i = 0; i < bars.length; i++){
-        const bar = bars[i].style
-        bar.height = this.state.nums[i].toString() + 'vh'
+        const bar = bars[i].style;
+        bar.height = this.state.nums[i].toString() + 'vh';
     }
 
 
-    var i = 0
-    var animating = setInterval(animate, 4)
+    let i = 0;
+    let speed = parseInt(document.getElementById('speedSlider').value);
+    let animating = setInterval(animate, (11 - speed / 10) * 4);
 
     function animate(){
-      const bar1 = bars[swaps[i][0]].style
-      const bar2 = bars[swaps[i][1]].style
+      const bar1 = bars[swaps[i][0]].style;
+      const bar2 = bars[swaps[i][1]].style;
 
       /*change color of the bars being swapped*/
-      bar1.backgroundColor = 'blue'
-      bar2.backgroundColor = 'blue'
+      bar1.backgroundColor = 'blue';
+      bar2.backgroundColor = 'blue';
 
       /*swap height of the two bars*/
       if(swaps[i][2]){
-        let temp = bar1.height
-        bar1.height = bar2.height
-        bar2.height = temp
+        let temp = bar1.height;
+        bar1.height = bar2.height;
+        bar2.height = temp;
       }
       i++
       if(i === swaps.length){
-        clearInterval(animating)
-        document.getElementById('createGraph').disabled = false
+        clearInterval(animating);
+        document.getElementById('numBarsSlider').disabled = false;
+        document.getElementById('speedSlider').disabled = false;
+        document.getElementById('createGraph').disabled = false;
       }
 
       setTimeout(function(){
-        bar1.backgroundColor = 'gray'
-        bar2.backgroundColor = 'gray'
+        bar1.backgroundColor = 'gray';
+        bar2.backgroundColor = 'gray';
       }, 20)
     }
 
@@ -75,15 +87,15 @@ class Main extends Component {
 
   bubbleSort(){
 
-    var nums = [...this.state.nums]
-    var j = nums.length - 1
-    var swaps = []
+    let nums = [...this.state.nums]
+    let j = nums.length - 1
+    let swaps = []
 
     while(j > 0){
       for(let i = 0; i < j; i++){
         swaps.push([i, i + 1, false])
         if(nums[i] > nums[i + 1]){
-          var temp = nums[i]
+          let temp = nums[i]
           nums[i] = nums[i + 1]
           nums[i + 1] = temp
           swaps[swaps.length - 1][2] = true
@@ -102,13 +114,13 @@ class Main extends Component {
 
   selectionSort(){
 
-    var nums = [...this.state.nums]
-    var swaps = []
+    let nums = [...this.state.nums]
+    let swaps = []
 
     for(let i = 0; i < nums.length - 1; i++){
-      var min = nums[i]
-      var minIndex = i
-      var prevMinIndex = swaps.length
+      let min = nums[i]
+      let minIndex = i
+      let prevMinIndex = swaps.length
 
 
       for(let j = i + 1; j < nums.length; j++){
@@ -122,7 +134,7 @@ class Main extends Component {
         }
       }
 
-      var temp = nums[i]
+      let temp = nums[i]
       nums[i] = nums[minIndex]
       nums[minIndex] = temp
     }
@@ -184,22 +196,22 @@ class Main extends Component {
       var mid = nums[Math.floor((i + j) / 2)]
 
       while(i <= j){
-        swaps.push([i, j, false])
+        swaps.push([i, j, false]);
         while(nums[i] < mid){
-          i++
-          swaps.push([i, j, false])
+          i++;
+          swaps.push([i, j, false]);
         }
         while(nums[j] > mid){
-          j--
-          swaps.push([i, j, false])
+          j--;
+          swaps.push([i, j, false]);
         }
         if(i <= j){
-          swaps[swaps.length - 1][2] = true
-          var temp = nums[i]
-          nums[i] = nums[j]
-          nums[j] = temp
-          i++
-          j--
+          swaps[swaps.length - 1][2] = true;
+          var temp = nums[i];
+          nums[i] = nums[j];
+          nums[j] = temp;
+          i++;
+          j--;
         }
       }
       return i
@@ -209,34 +221,52 @@ class Main extends Component {
       hideSorts: true
     })
 
-    this.animate(swaps)
+    this.animate(swaps);
   }
 
 
+
   render(){
-    var sortIds = 'sortButton'
-    if(this.state.hideSorts){
-      sortIds = 'sortButton hide'
+    let numberOfBars = 0;
+    if(this.state.initial){
+      this.createNums();
+    } else {
+      numberOfBars = document.getElementById('numBarsSlider').value;
     }
 
-    var nums = this.state.nums
+
+    let buttons = 'buttons';
+    if(this.state.hideSorts){
+      buttons = 'buttons hide';
+    }
+    let nums = this.state.nums;
     return(
       <div id='main'>
-        <button id='createGraph' onClick={this.createNums}>Create graph</button>
-        <button id='bubbleSort' className={sortIds} onClick={this.bubbleSort}>Bubble Sort</button>
-        <button id='selectionSort' className={sortIds} onClick={this.selectionSort}>Selection Sort</button>
-        <button id='insertionSort' className={sortIds} onClick={this.insertionSort}>Insertion Sort</button>
-        <button id='quickSort' className={sortIds} onClick={this.quickSort}>Quick Sort</button>
+        <div>
+          <input onChange={this.createNums} type="range" id="numBarsSlider" min="2" max="100"/>
+          <label for="numBars">Number of Bars: {numberOfBars}</label>
+        </div>
+        <div>
+          <input type="range" id="speedSlider" min="1" max="100"/>
+          <label for="numBars">Sorting Speed</label>
+        </div>
+        <button id='createGraph' className='buttons' onClick={this.createNums}>New Bars</button>
+        <button id='bubbleSort' className={buttons} onClick={this.bubbleSort}>Bubble Sort</button>
+        <button id='selectionSort' className={buttons} onClick={this.selectionSort}>Selection Sort</button>
+        <button id='insertionSort' className={buttons} onClick={this.insertionSort}>Insertion Sort</button>
+        <button id='quickSort' className={buttons} onClick={this.quickSort}>Quick Sort</button>
         <div id='bars'>
           {
             nums.map((i,idx) => {
               return(
                 <div
-                  className="bar"
+                  className='bar'
                   key={idx}
                   style={{
                       backgroundColor: 'gray',
                       height: `${i}vh`,
+                      width: `${100 / this.state.nums.length / 2}vw`,
+                      margin: `${100 / this.state.nums.length / 4}vw`
                     }}>
                 </div>
             )
